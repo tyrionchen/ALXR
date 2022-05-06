@@ -87,7 +87,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_audio"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -104,7 +104,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -129,7 +129,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_commands"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -143,7 +143,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_common"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "backtrace",
  "glam",
@@ -156,7 +156,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_filesystem"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "dirs",
  "lazy_static",
@@ -165,7 +165,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_launcher"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_commands",
  "alvr_common",
@@ -182,7 +182,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alcro",
  "alvr_audio",
@@ -218,7 +218,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_session"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_common",
  "bytemuck",
@@ -230,7 +230,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_sockets"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -248,7 +248,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_vulkan-layer"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_filesystem",
  "bindgen",
@@ -259,7 +259,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_xtask"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "alvr_filesystem",
  "camino",
@@ -2945,9 +2945,9 @@ dependencies = [
 
 [[package]]
 name = "num_threads"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aba1801fb138d8e85e11d0fc70baf4fe1cdfffda7c6cd34a854905df588e5ed0"
+checksum = "2819ce041d2ee131036f4fc9d6ae7ae125a3a40e97ba64d04fe799ad9dabbb44"
 dependencies = [
  "libc",
 ]
@@ -3366,9 +3366,9 @@ checksum = "dbf0c48bc1d91375ae5c3cd81e3722dff1abcf81a30960240640d223f59fe0e5"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.37"
+version = "1.0.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec757218438d5fda206afc041538b2f6d889286160d649a86a24d37e1235afd1"
+checksum = "9027b48e9d4c9175fa2218adf3557f91c1137021739951d4932f5f8268ac48aa"
 dependencies = [
  "unicode-xid",
 ]
@@ -4649,7 +4649,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "vrcompositor-wrapper"
-version = "18.2.1"
+version = "18.2.2"
 dependencies = [
  "exec",
 ]
