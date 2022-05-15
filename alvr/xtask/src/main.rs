@@ -153,7 +153,30 @@ pub fn build_server(
     if bundle_ffmpeg {
         let nvenc_flag = !no_nvidia;
         let lib_dir = afs::server_build_dir().join("lib64").join("alvr");
-        build_copy_ffmpeg(&lib_dir, nvenc_flag);
+        let mut libavcodec_so = std::path::PathBuf::new();
+        fs::create_dir_all(lib_dir.clone()).unwrap();
+        for lib in walkdir::WalkDir::new(ffmpeg_path)
+            .into_iter()
+            .filter_map(|maybe_entry| maybe_entry.ok())
+            .map(|entry| entry.into_path())
+            .filter(|path| path.file_name().unwrap().to_string_lossy().contains(".so."))
+        {
+            let lib_filename = lib.file_name().unwrap();
+            if lib_filename.to_string_lossy().starts_with("libavcodec.so") {
+                libavcodec_so = lib.canonicalize().unwrap();
+            }
+            fs::copy(lib.clone(), lib_dir.join(&lib_filename)).unwrap();
+        }
+        // copy ffmpeg shared lib dependencies.
+        let lib_dir = lib_dir.canonicalize().unwrap();
+        for solib in ["libx264.so", "libx265.so"] {
+            let src_libs = dependencies::find_resolved_so_paths(&libavcodec_so, solib);
+            if !src_libs.is_empty() {
+                let src_lib = src_libs.first().unwrap();
+                let dst_lib = lib_dir.join(src_lib.file_name().unwrap());
+                fs::copy(src_lib, dst_lib).unwrap();
+            }
+        }
     }
 
     if gpl && cfg!(windows) {
