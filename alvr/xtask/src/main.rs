@@ -152,6 +152,7 @@ pub fn build_server(
 
     if bundle_ffmpeg {
         let nvenc_flag = !no_nvidia;
+        let ffmpeg_path = dependencies::build_ffmpeg_linux(nvenc_flag);
         let lib_dir = afs::server_build_dir().join("lib64").join("alvr");
         let mut libavcodec_so = std::path::PathBuf::new();
         fs::create_dir_all(lib_dir.clone()).unwrap();
