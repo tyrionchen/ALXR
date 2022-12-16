@@ -42,6 +42,15 @@ android {
         }
     }
 
+    sourceSets.main {
+        java.srcDirs=['src/main/java', '/Users/cyy/Desktop/projects/ALXR_OPENGLES/alvr/openxr-client/alxr-engine-sys/android/app/src/main/java']
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     flavorDimensions 'headset'
     productFlavors {
         Generic {
