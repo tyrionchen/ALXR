@@ -567,7 +567,7 @@ async fn connection_pipeline(
         }
     });
 
-    let tracking_interval = Duration::from_secs_f32(1_f32 / (config_packet.fps * 3_f32)); // Duration::from_secs_f32(1_f32 / 360_f32);//
+    let tracking_interval = Duration::from_secs_f32(0.005_f32); // Duration::from_secs_f32(1_f32 / 360_f32);//
     let tracking_loop = async move {
         let mut deadline = Instant::now();
         loop {
