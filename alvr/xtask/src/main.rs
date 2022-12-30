@@ -958,6 +958,57 @@ pub fn build_alxr_android(
     }
 }
 
+pub fn build_tcr_demo(
+    root: Option<String>,
+    client_flavor: AndroidFlavor,
+    flags: AlxBuildFlags,
+) {
+    let build_type = if flags.is_release { "release" } else { "debug" };
+    let build_flags = flags.make_build_string();
+
+    if let Some(root) = root {
+        env::set_var("ALVR_ROOT_DIR", root);
+    }
+
+    if flags.fetch_crates {
+        command::run("cargo update").unwrap();
+    }
+    install_alxr_depends();
+
+    let alxr_client_build_dir = afs::alxr_android_build_dir(build_type);
+    //fs::remove_dir_all(&alxr_client_build_dir).ok();
+    fs::create_dir_all(&alxr_client_build_dir).unwrap();
+
+    let client_dir = match client_flavor {
+        AndroidFlavor::OculusQuest => "quest",
+        AndroidFlavor::PicoNeo3 => "pico-neo",
+        _ => "",
+    };
+    // cargo-apk has an issue where it will search the entire "target" build directory for "output" files that contain
+    // a build.rs print of out "cargo:rustc-link-search=...." and use those paths to determine which
+    // shared libraries copy into the final apk, this can causes issues if there are multiple versions of shared libs
+    // with the same name.
+    //     E.g.: The wrong platform build of libopenxr_loader.so gets copied into the wrong apk when
+    //           more than one variant of android client gets built.
+    // The workaround is set different "target-dir" for each variant/flavour of android builds.
+    let target_dir = afs::target_dir().join(client_dir);
+    let alxr_client_dir = afs::workspace_dir()
+        .join("alvr/openxr-client/alxr-android-client")
+        .join(client_dir);
+    
+    env::set_var("CARGO_NDK_OUTPUT_DIR", target_dir.clone());
+
+    command::run_in(
+        &alxr_client_dir,
+        &format!(
+            "cargo ndk -t arm64-v8a -o {0} build",
+            target_dir.display()
+        ),
+    )
+    .unwrap();
+}
+
+
 // Avoid Oculus link popups when debugging the client
 pub fn kill_oculus_processes() {
     command::run_without_shell(
@@ -1154,6 +1205,18 @@ fn main() {
                         fetch_crates: fetch,
                         ..Default::default()
                     },
+                ),
+                "build-tcr-demo" => build_tcr_demo(
+                    root,
+                    AndroidFlavor::OculusQuest,
+                    AlxBuildFlags {
+                        is_release: is_release,
+                        reproducible: reproducible,
+                        no_nvidia: true,
+                        bundle_ffmpeg: false,
+                        fetch_crates: fetch,
+                        ..Default::default()
+                    }
                 ),
                 "build-alxr-pico" => build_alxr_android(
                     root,
