@@ -272,6 +272,8 @@ fn main() {
             alxr_engine_output_dir.to_string_lossy()
         );
 
+        
+
         fn is_so_file(path: &std::path::Path) -> bool {
             if let Some(ext) = path.extension() {
                 if ext.to_str().unwrap().eq("so") {
@@ -281,18 +283,20 @@ fn main() {
             return false;
         }
         
-        for so_file in walkdir::WalkDir::new(&alxr_engine_output_dir)
+        if let Ok(cargo_ndk_output_dir) = env::var("CARGO_NDK_OUTPUT_DIR")  {
+            for so_file in walkdir::WalkDir::new(&alxr_engine_output_dir)
             .into_iter()
             .filter_map(|maybe_entry| maybe_entry.ok())
             .map(|entry| entry.into_path())
             .filter(|entry| is_so_file(&entry))
-        {
-            let out_dir = PathBuf::from(env::var("CARGO_NDK_OUTPUT_DIR").unwrap());
-            let dst_dir = out_dir.join(android_abi_name(&target_triple).unwrap());
-            let relative_csof = so_file.strip_prefix(&alxr_engine_output_dir).unwrap();
-            let dst_file = dst_dir.join(relative_csof);
-            std::fs::create_dir_all(dst_file.parent().unwrap()).unwrap();
-            std::fs::copy(&so_file, &dst_file).unwrap();
+            {
+                let out_dir = PathBuf::from(cargo_ndk_output_dir.clone());
+                let dst_dir = out_dir.join(android_abi_name(&target_triple).unwrap());
+                let relative_csof = so_file.strip_prefix(&alxr_engine_output_dir).unwrap();
+                let dst_file = dst_dir.join(relative_csof);
+                std::fs::create_dir_all(dst_file.parent().unwrap()).unwrap();
+                std::fs::copy(&so_file, &dst_file).unwrap();
+            }
         }
     } else {
         let alxr_engine_bin_dir = alxr_engine_output_dir.join("bin");
