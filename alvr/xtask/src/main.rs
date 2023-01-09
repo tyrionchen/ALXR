@@ -35,6 +35,7 @@ SUBCOMMANDS:
     build-alxr-android  Build OpenXR based client (android platforms only), then copy binaries to build folder
     build-alxr-quest    Build OpenXR based client for Oculus Quest (same as `build-alxr-android --oculus-quest`), then copy binaries to build folder
     build-alxr-pico     Build OpenXR based client for Pico Neo 3 (same as `build-alxr-android --pico-neo`), then copy binaries to build folder
+    build-tcr-demo      Build TcrDemo only for Oculus Quest(that result so in dir: target/quest/arm64-v8a)
     build-ffmpeg-linux  Build FFmpeg with VAAPI, NvEnc and Vulkan support. Only for CI
     publish-server      Build server in release mode, make portable version and installer
     publish-client      Build client for all headsets
@@ -883,6 +884,15 @@ fn install_alxr_depends() {
     command::run("cargo install cargo-apk --git https://github.com/korejan/android-ndk-rs.git --branch android-manifest-entries").unwrap();
 }
 
+// 需要手动执行cargo install cargo-ndk 安装cago-ndk
+fn install_tcrdemo_depends() {
+    command::run("rustup target add \
+        aarch64-linux-android \
+        armv7-linux-androideabi \
+        x86_64-linux-android \
+        i686-linux-android").unwrap();
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum AndroidFlavor {
     Generic,
@@ -973,7 +983,7 @@ pub fn build_tcr_demo(
     if flags.fetch_crates {
         command::run("cargo update").unwrap();
     }
-    install_alxr_depends();
+    install_tcrdemo_depends();
 
     let alxr_client_build_dir = afs::alxr_android_build_dir(build_type);
     //fs::remove_dir_all(&alxr_client_build_dir).ok();
