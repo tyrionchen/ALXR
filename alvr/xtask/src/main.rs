@@ -35,7 +35,7 @@ SUBCOMMANDS:
     build-alxr-android  Build OpenXR based client (android platforms only), then copy binaries to build folder
     build-alxr-quest    Build OpenXR based client for Oculus Quest (same as `build-alxr-android --oculus-quest`), then copy binaries to build folder
     build-alxr-pico     Build OpenXR based client for Pico Neo 3 (same as `build-alxr-android --pico-neo`), then copy binaries to build folder
-    build-tcr-demo      Build TcrDemo only for Oculus Quest(that result so in dir: target/quest/arm64-v8a)
+    build-tcr-version   Build Tcr customize version only for Oculus Quest(that result so in dir: target/quest/arm64-v8a)
     build-ffmpeg-linux  Build FFmpeg with VAAPI, NvEnc and Vulkan support. Only for CI
     publish-server      Build server in release mode, make portable version and installer
     publish-client      Build client for all headsets
@@ -968,7 +968,7 @@ pub fn build_alxr_android(
     }
 }
 
-pub fn build_tcr_demo(
+pub fn build_tcr_version(
     root: Option<String>,
     client_flavor: AndroidFlavor,
     flags: AlxBuildFlags,
@@ -1216,7 +1216,7 @@ fn main() {
                         ..Default::default()
                     },
                 ),
-                "build-tcr-demo" => build_tcr_demo(
+                "build-tcr-version" => build_tcr_version(
                     root,
                     AndroidFlavor::OculusQuest,
                     AlxBuildFlags {

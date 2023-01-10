@@ -1,5 +1,6 @@
 use cmake::Config;
 use core::str::FromStr;
+use std::collections::btree_set::Difference;
 use std::{env, path::PathBuf};
 use std::{ffi::OsStr, process::Command};
 use target_lexicon::{Architecture, ArmArchitecture, Environment, OperatingSystem, Triple};
@@ -101,16 +102,21 @@ fn cmake_option_from_feature(feature_name: &str) -> &'static str {
 
 const FALVOR_FEATURE_NAMES: [&'static str; 3] =
     ["GENERIC_FLAVOR", "QUEST_FLAVOR", "PICO_NEO_FLAVOR"];
-const GRADLE_FLAVOR_NAMES: [&'static str; 3] = ["Generic", "OculusMobileOXR", "PicoMobileOXR"];
+const GRADLE_FLAVOR_NAMES: [&'static str; 4] = ["Generic", "OculusMobileOXR", "PicoMobileOXR", "OculusMobileTcrDemo"];
 
 fn get_product_flavour() -> &'static str {
-    for i in 0..FALVOR_FEATURE_NAMES.len() {
-        let feature_name = "CARGO_FEATURE_".to_string() + FALVOR_FEATURE_NAMES[i];
-        if is_feature_enabled(&feature_name) {
-            return GRADLE_FLAVOR_NAMES[i];
+    // 如果指定了CARGO_NDK_OUTPUT_DIR路径表示需要buildTcrDemo, 这个时候直接使用OculusMobileTcrDemo这个flavor
+    if let Ok(_) = env::var("CARGO_NDK_OUTPUT_DIR")  {
+        GRADLE_FLAVOR_NAMES[3]
+    } else {
+        for i in 0..FALVOR_FEATURE_NAMES.len() {
+            let feature_name = "CARGO_FEATURE_".to_string() + FALVOR_FEATURE_NAMES[i];
+            if is_feature_enabled(&feature_name) {
+                return GRADLE_FLAVOR_NAMES[i];
+            }
         }
+        GRADLE_FLAVOR_NAMES[0]
     }
-    GRADLE_FLAVOR_NAMES[0]
 }
 
 fn define_windows_store(config: &mut Config) -> &mut Config {
