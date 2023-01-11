@@ -79,11 +79,11 @@ fullscreen = true
 
 # The maximum supported OpenGL ES version , as claimed by the manifest. Defaults to 2.0.
 # See https://developer.android.com/guide/topics/graphics/opengl.html#manifest
-#opengles_version_major = 3
-#opengles_version_minor = 2
+opengles_version_major = 3
+opengles_version_minor = 2
 # Set the minimum required OpenGL ES version.
 # Defaults to [3, 1]
-#opengles_version = [3, 2]
+opengles_version = [3, 2]
 
 # Defaults to `$HOME/.android/debug.keystore` for the `dev` profile. Will ONLY generate a new
 # debug.keystore if this file does NOT exist.

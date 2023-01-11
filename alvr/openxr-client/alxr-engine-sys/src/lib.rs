@@ -10,6 +10,7 @@ impl From<&str> for crate::ALXRGraphicsApi {
             "D3D12" => crate::ALXRGraphicsApi::D3D12,
             "D3D11" => crate::ALXRGraphicsApi::D3D11,
             "OpenGLES" => crate::ALXRGraphicsApi::OpenGLES,
+            "OpenGLES2" => crate::ALXRGraphicsApi::OpenGLES2,
             "OpenGL" => crate::ALXRGraphicsApi::OpenGL,
             _ => crate::ALXRGraphicsApi::Auto,
         }
