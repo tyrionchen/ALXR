@@ -1011,7 +1011,7 @@ pub fn build_tcr_version(
     command::run_in(
         &alxr_client_dir,
         &format!(
-            "cargo ndk -t arm64-v8a -o {0} build",
+            "cargo ndk -t arm64-v8a -o {0} build --features build_tcr_version",
             target_dir.display()
         ),
     )

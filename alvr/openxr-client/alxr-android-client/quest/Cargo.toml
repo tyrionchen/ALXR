@@ -10,6 +10,9 @@ description = "An OpenXR based ALVR client for Oculus Quest 1/2"
 crate-type = ["cdylib"]
 path = "../src/lib.rs" 
 
+[features]
+build_tcr_version = []
+
 [dependencies]
 alxr-common = { path = "../../alxr-common", features = ["quest-flavor"] }
 jni = "0.20"

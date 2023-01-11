@@ -64,6 +64,11 @@ impl AppData {
 
 #[cfg_attr(target_os = "android", ndk_glue::main(backtrace = "on"))]
 pub fn main() {
+    if cfg!(feature = "build_tcr_version") {
+        println!("build_tcr_version: true");
+    } else {
+        println!("build_tcr_version: false");
+    }
     println!("{:?}", *APP_CONFIG);
     let mut app = AppData {
         destroy_requested: false,
