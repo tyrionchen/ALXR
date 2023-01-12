@@ -979,6 +979,7 @@ pub fn build_tcr_version(
     if let Some(root) = root {
         env::set_var("ALVR_ROOT_DIR", root);
     }
+    std::env::set_var("RUST_BACKTRACE", "full");
 
     if flags.fetch_crates {
         command::run("cargo update").unwrap();
@@ -1011,7 +1012,7 @@ pub fn build_tcr_version(
     command::run_in(
         &alxr_client_dir,
         &format!(
-            "cargo ndk -t arm64-v8a -o {0} build --features build_tcr_version",
+            "cargo ndk -t arm64-v8a --no-strip -o {0} build --features build_tcr_version",
             target_dir.display()
         ),
     )

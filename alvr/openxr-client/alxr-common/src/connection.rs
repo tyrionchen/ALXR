@@ -776,6 +776,34 @@ async fn connection_pipeline(
     }
 }
 
+
+async fn connection_pipeline2(
+    headset_info: &HeadsetInfoPacket,
+    device_name: String,
+    private_identity: &PrivateIdentity,
+    //java_vm: Arc<JavaVM>,
+    //activity_ref: Arc<GlobalRef>,
+    //nal_class_ref: Arc<GlobalRef>,
+) -> StrResult {
+    warn!("tcr version connection_pipeline");
+
+    let tracking_interval = Duration::from_secs_f32(1_f32 / (60_f32 * 3_f32)); // Duration::from_secs_f32(1_f32 / 360_f32);//
+    let tracking_loop = async move {
+        let mut deadline = Instant::now();
+        loop {
+            let tracking_clientside_prediction = true;
+            unsafe { crate::alxr_on_tracking_update(tracking_clientside_prediction) };
+            deadline += tracking_interval;
+            time::sleep_until(deadline).await;
+        }
+    };
+
+    // Run many tasks concurrently. Threading is managed by the runtime, for best performance.
+    tokio::select! {
+        res = tracking_loop => res,
+    }
+}
+
 pub async fn connection_lifecycle_loop(
     headset_info: HeadsetInfoPacket,
     device_name: &str,
@@ -795,32 +823,63 @@ pub async fn connection_lifecycle_loop(
 
     loop {
         tokio::join!(
-            async {
-                let maybe_error = connection_pipeline(
-                    &headset_info,
-                    device_name.to_owned(),
-                    &private_identity,
-                    // Arc::clone(&java_vm),
-                    // Arc::clone(&activity_ref),
-                    // Arc::clone(&nal_class_ref),
-                )
-                .await;
 
-                if let Err(e) = maybe_error {
-                    let message =
-                        format!("Connection error:\n{}\nCheck the PC for more details", e);
-                    error!("{}", message);
-                    println!("{}", message);
-                    // set_loading_message(
-                    //     &*java_vm,
-                    //     &*activity_ref,
-                    //     &private_identity.hostname,
-                    //     &message,
-                    // )
-                    // .ok();
-                    unsafe { crate::alxr_on_server_disconnect() };
+            async {
+                if cfg!(feature = "build_tcr_version") {
+                    let maybe_error = connection_pipeline2(
+                        &headset_info,
+                        device_name.to_owned(),
+                        &private_identity,
+                        // Arc::clone(&java_vm),
+                        // Arc::clone(&activity_ref),
+                        // Arc::clone(&nal_class_ref),
+                    )
+                    .await;
+    
+                    if let Err(e) = maybe_error {
+                        let message =
+                            format!("Connection error:\n{}\nCheck the PC for more details", e);
+                        error!("{}", message);
+                        println!("{}", message);
+                        // set_loading_message(
+                        //     &*java_vm,
+                        //     &*activity_ref,
+                        //     &private_identity.hostname,
+                        //     &message,
+                        // )
+                        // .ok();
+                        unsafe { crate::alxr_on_server_disconnect() };
+                    }
+    
+                } else {
+                    let maybe_error = connection_pipeline(
+                        &headset_info,
+                        device_name.to_owned(),
+                        &private_identity,
+                        // Arc::clone(&java_vm),
+                        // Arc::clone(&activity_ref),
+                        // Arc::clone(&nal_class_ref),
+                    )
+                    .await;
+    
+                    if let Err(e) = maybe_error {
+                        let message =
+                            format!("Connection error:\n{}\nCheck the PC for more details", e);
+                        error!("{}", message);
+                        println!("{}", message);
+                        // set_loading_message(
+                        //     &*java_vm,
+                        //     &*activity_ref,
+                        //     &private_identity.hostname,
+                        //     &message,
+                        // )
+                        // .ok();
+                        unsafe { crate::alxr_on_server_disconnect() };
+                    }
+    
                 }
 
+                
                 // let any running task or socket shutdown
                 time::sleep(CLEANUP_PAUSE).await;
             },

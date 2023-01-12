@@ -152,11 +152,6 @@ fn run(app_data: &mut AppData) -> Result<(), Box<dyn std::error::Error>> {
             return Ok(());
         }
 
-        // if cfg!(feature = "build_tcr_version") {
-        //     println!("build_tcr_version: not call init_connections()");
-        // } else {
-        //     init_connections(&sys_properties);
-        // }
         init_connections(&sys_properties);
 
         while !app_data.destroy_requested {

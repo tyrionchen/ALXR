@@ -1,0 +1,3 @@
+cargo xtask build-tcr-version
+cp target/quest/arm64-v8a/*.so /Users/cyy/Desktop/projects/cloud_gaming_android4/TcrXrProject/TcrXrSdk/tcr-xr/src/main/jniLibs/arm64-v8a/
+cp ./target/aarch64-linux-android/debug/libalxr_client_quest.so /Users/cyy/Desktop/projects/cloud_gaming_android4/TcrXrProject/TcrXrSdk/tcr-xr/src/main/jniLibs/arm64-v8a/
