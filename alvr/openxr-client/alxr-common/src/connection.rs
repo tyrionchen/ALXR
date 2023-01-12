@@ -805,6 +805,7 @@ async fn connection_pipeline2(
 }
 
 pub async fn connection_lifecycle_loop(
+    is_tcr_version: bool,
     headset_info: HeadsetInfoPacket,
     device_name: &str,
     private_identity: PrivateIdentity,
@@ -825,7 +826,8 @@ pub async fn connection_lifecycle_loop(
         tokio::join!(
 
             async {
-                if cfg!(feature = "build_tcr_version") {
+                if is_tcr_version {
+                    println!("tcr version connection_lifecycle_loop");
                     let maybe_error = connection_pipeline2(
                         &headset_info,
                         device_name.to_owned(),
@@ -852,6 +854,7 @@ pub async fn connection_lifecycle_loop(
                     }
     
                 } else {
+                    println!("normal connection_lifecycle_loop");
                     let maybe_error = connection_pipeline(
                         &headset_info,
                         device_name.to_owned(),
