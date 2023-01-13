@@ -1,3 +1,6 @@
+# 运行这个脚本的前提:
+# 1.需要先确保能正常构建ALXR客户端(参考官网或:https://iwiki.woa.com/pages/viewpage.action?pageId=4007072608)
+# 2.需要手动安装cargo-ndk: cargo install cargo-ndk
 set -e
 
 rm -rf alxr_lib
