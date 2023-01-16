@@ -233,6 +233,9 @@ name = "android.permission.ACCESS_NETWORK_STATE"
 [[package.metadata.android.uses_permission]]
 name = "android.permission.READ_EXTERNAL_STORAGE"
 
+[[package.metadata.android.uses_permission]]
+name = "android.permission.WRITE_EXTERNAL_STORAGE"
+
 #<!-- Allows to access TrackingEnvironment functionality -->
 # [[package.metadata.android.uses_permission]]
 # name = "com.oculus.permission.ACCESS_TRACKING_ENV"
