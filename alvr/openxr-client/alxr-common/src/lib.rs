@@ -273,9 +273,10 @@ pub fn init_connections(sys_properties: &ALXRSystemProperties) {
 
         let runtime = trace_err!(Runtime::new())?;
 
+        let is_tcr_version = sys_properties.isTcrVersion;
         runtime.spawn(async move {
             let connection_loop =
-                connection::connection_lifecycle_loop(headset_info, device_name, private_identity);
+                connection::connection_lifecycle_loop(is_tcr_version, headset_info, device_name, private_identity);
             tokio::select! {
                 _ = connection_loop => (),
                 _ = ON_PAUSE_NOTIFIER.notified() => ()

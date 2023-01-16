@@ -59,6 +59,7 @@ impl ALXRSystemProperties {
             refreshRatesCount: 0,
             recommendedEyeWidth: 0,
             recommendedEyeHeight: 0,
+            isTcrVersion: false,
         }
     }
 }
